@@ -18,7 +18,6 @@ import com.chainsys.evaluationapp.dao.StatusDAO;
 import com.chainsys.evaluationapp.dao.TopicsDAO;
 import com.chainsys.evaluationapp.model.Employee;
 import com.chainsys.evaluationapp.model.EmployeeTopics;
-import com.chainsys.evaluationapp.model.Topics;
 
 @Service
 public class Services {
@@ -31,8 +30,17 @@ public class Services {
 	@Autowired
 	public EmployeeDAO employeeDAO;
 
+	/**
+	 * 
+	 * @param employee
+	 * @return {@link List}
+	 * @throws Exception
+	 */
+
 	public List<EmployeeTopics> fetchUserDetails(Employee employee)
 			throws Exception {
+
+		// To Fetch and initialize topic and status name
 
 		List<EmployeeTopics> employeeEvaluationDetails = employeeTopicsDAO
 				.searchEvaluationById(employee);
@@ -50,14 +58,16 @@ public class Services {
 
 	}
 
-	public Topics fetchTopicId(Topics topic) {
-
-		Topics fetchedTopic = topicsDAO.searchTopicId(topic.getName());
-		return fetchedTopic;
-	}
+	/**
+	 * 
+	 * @param topic
+	 * @return {@link List}
+	 */
 
 	public List<EmployeeTopics> fetchUserTopicsDetails(
 			List<EmployeeTopics> employeeTopicsList) {
+
+		// To initialize employee,topic and status name
 
 		employeeTopicsList.forEach(employeeDetail -> {
 			employeeDetail.setEmployee(employeeDAO
@@ -71,7 +81,16 @@ public class Services {
 		return employeeTopicsList;
 	}
 
+	/**
+	 * 
+	 * @throws IOException
+	 * @return {@link Void}
+	 */
+
 	public void employeeDetailsExcel() throws IOException {
+
+		// To export user details to excel
+
 		final String file = "E:\\INTERNSHIP\\JAVA\\WORKSPACE\\evaluation-app\\Records\\EmployeeList.xlsx";
 		Workbook employeeWorkbook = new XSSFWorkbook();
 		Sheet employeeSheet = employeeWorkbook.createSheet();
@@ -95,12 +114,22 @@ public class Services {
 
 	}
 
-	public void employeeEvaluationDetail(List<EmployeeTopics> evaluationList)
+	/**
+	 * 
+	 * @param evaluationList
+	 * @throws IOException
+	 * @return {@link Void}
+	 */
+
+	public void employeeEvaluationExcel(List<EmployeeTopics> evaluationList)
 			throws IOException {
+		
+		//To export evaluation details of all users to excel
+		
 		final String path = "E:\\INTERNSHIP\\JAVA\\WORKSPACE\\evaluation-app\\Records\\EmployeeEvaluation.xlsx";
 		Workbook evaluationWorkBook = new XSSFWorkbook();
 		Sheet sheetName = null;
-		Row row=null;
+		Row row = null;
 		int rowIndex = 0;
 		int cellIndex = 0;
 		for (EmployeeTopics evaluationInfo : evaluationList) {
@@ -118,12 +147,14 @@ public class Services {
 			} else {
 				sheetName = evaluationWorkBook.getSheet(evaluationInfo
 						.getEmployee().getName());
-				rowIndex=sheetName.getLastRowNum()+1;
-				cellIndex=0;	
-				row=sheetName.createRow(rowIndex++);
+				rowIndex = sheetName.getLastRowNum() + 1;
+				cellIndex = 0;
+				row = sheetName.createRow(rowIndex++);
 				sheetName.autoSizeColumn(3);
-				row.createCell(cellIndex++).setCellValue(evaluationInfo.getTopic().getName());
-				row.createCell(cellIndex++).setCellValue(evaluationInfo.getStatus().getName());
+				row.createCell(cellIndex++).setCellValue(
+						evaluationInfo.getTopic().getName());
+				row.createCell(cellIndex++).setCellValue(
+						evaluationInfo.getStatus().getName());
 			}
 		}
 

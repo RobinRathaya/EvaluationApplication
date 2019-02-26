@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.chainsys.evaluationapp.ExceptionHandler.InvalidPasswordException;
 import com.chainsys.evaluationapp.dao.AuthenticationDAO;
 import com.chainsys.evaluationapp.dao.EmployeeDAO;
 import com.chainsys.evaluationapp.dao.TopicsDAO;
@@ -40,6 +41,8 @@ public class UserController {
 	@PostMapping("/login")
 	public List<EmployeeTopics> login(@RequestParam("email") String email,
 			@RequestParam("password") String password) throws Exception {
+		
+		//TODO validate Sign-in
 
 		Employee employee = new Employee();
 		employee.setEmail(email);
@@ -53,6 +56,9 @@ public class UserController {
 	public int addStatus(@RequestParam("empid") int empid,
 			@RequestParam("topicname") String topicName,
 			@RequestParam("statusid") int statusId) throws Exception {
+		
+		//TODO add new status for a topic
+		
 		int noOfRows = 0;
 		EmployeeTopics employeeTopics = new EmployeeTopics();
 		Employee employee = new Employee();
@@ -69,11 +75,7 @@ public class UserController {
 		employeeTopics.setCreatedOn(LocalDateTime.now());
 		employeeTopics.setUpdatedOn(null);
 
-		boolean isExist = validator.statusInsertValidation(employeeTopics);
-		if (!isExist)
-			noOfRows = employeeDAO.addEmployeeStatus(employeeTopics);
-		else
-			throw new Exception("Already entered status for this topic");
+		validator.statusInsertValidation(employeeTopics);
 		return noOfRows;
 	}
 
@@ -81,6 +83,8 @@ public class UserController {
 	public int updateStatus(@RequestParam("empid") int empid,
 			@RequestParam("topicname") String topicName,
 			@RequestParam("statusid") int statusId) {
+		
+		//TODO update the status for topic
 
 		EmployeeTopics employeeTopics = new EmployeeTopics();
 		Employee employee = new Employee();
@@ -102,6 +106,9 @@ public class UserController {
 
 	@GetMapping("/displaytopics")
 	public List<Topics> displayTopics() throws Exception {
+		
+		// TODO display all the topics
+		
 		List<Topics> topicsList = topicsDAO.displayTopics();
 		return topicsList;
 	}
@@ -109,21 +116,16 @@ public class UserController {
 	@PostMapping("/resetpassword")
 	public int resetPassword(@RequestParam("empid") int empid,			
 			@RequestParam("newpassword") String newpassword,
-			@RequestParam("oldpassword") String oldpassword) throws Exception {
+			@RequestParam("oldpassword") String oldpassword) throws InvalidPasswordException {
+		
+		//TODO reset the password for profile
+		
 		int resetStatus = 0;
 		Employee employee = new Employee();
 		employee.setId(empid);
 		employee.setPassword(oldpassword);
-		boolean isExists = validator.passwordValidation(employee);
-		System.out.println(isExists);
-		if (isExists) {
-			employee.setPassword(newpassword);
-			resetStatus = authenticationDAO.resetPassword(employee);
-		}
-
-		else {
-			throw new Exception("Old password is wrong");
-		}
+		validator.passwordValidation(employee);
+		resetStatus = authenticationDAO.resetPassword(employee);
 		return resetStatus;
 	}
 }

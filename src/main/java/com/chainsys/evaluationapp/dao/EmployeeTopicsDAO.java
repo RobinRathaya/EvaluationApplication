@@ -31,7 +31,9 @@ public class EmployeeTopicsDAO {
 	 */
 	public List<EmployeeTopics> searchEvaluationById(Employee employee)
 			throws Exception {
-
+			
+		//TODO Search the Evaluation detail by employee id
+		
 		String query = "SELECT et.id,et.empid,et.topicid,et.statusid,et.createdon,et.modifiedon FROM EV_EMPLOYEETOPICS et WHERE et.empid=?";
 		Object[] parameters = new Object[] { employee.getId() };
 		List<EmployeeTopics> employeeEvaluationDetails = jdbcTemplate
@@ -57,6 +59,9 @@ public class EmployeeTopicsDAO {
 	 */
 	private EmployeeTopics employeeTopicsIntailization(ResultSet resultSet)
 			throws SQLException {
+		
+		//TODO Initialize employeeTopics
+		
 		EmployeeTopics employeeDetails = new EmployeeTopics();
 		employeeDetails.topic = new Topics();
 		employeeDetails.status = new Status();
@@ -74,8 +79,16 @@ public class EmployeeTopicsDAO {
 		}
 		return employeeDetails;
 	}
+	
+	/**
+	 * 
+	 * @return {@link List}
+	 */
 
 	public List<EmployeeTopics> searchEvaluation() {
+		
+		//TODO Search Evaluation Details
+		
 		String query = "SELECT et.id,et.empid,et.topicid,et.statusid,et.createdon,et.modifiedon FROM EV_EMPLOYEETOPICS et";
 
 		List<EmployeeTopics> employeeEvaluationDetails = jdbcTemplate

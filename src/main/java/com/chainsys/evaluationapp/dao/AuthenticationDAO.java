@@ -28,8 +28,10 @@ public class AuthenticationDAO {
 
 	private Employee employeeIntialization(ResultSet resultSet)
 			throws SQLException {
-		Employee employee = new Employee();
 
+		// TODO initialize employee detail
+
+		Employee employee = new Employee();
 		employee.setId(resultSet.getInt("id"));
 		employee.setName(resultSet.getString("name"));
 
@@ -45,6 +47,8 @@ public class AuthenticationDAO {
 
 	public List<EmployeeTopics> loginValidation(Employee employee)
 			throws Exception {
+
+		// TODO perform login validation
 
 		String query = "SELECT id,name,email,password FROM EV_EMPLOYEE WHERE email= ? AND password=? ";
 
@@ -63,7 +67,16 @@ public class AuthenticationDAO {
 
 	}
 
+	/**
+	 * 
+	 * @param employee
+	 * @return int
+	 */
+
 	public int resetPassword(Employee employee) {
+
+		// TODO perform reset password
+
 		String query = "UPDATE EV_EMPLOYEE SET password=? WHERE id=?";
 		Object[] parameters = new Object[] { employee.getPassword(),
 				employee.getId() };
@@ -71,9 +84,19 @@ public class AuthenticationDAO {
 		return resetPasswordResult;
 	}
 
+	/**
+	 * 
+	 * @param employee
+	 * @return {@link Employee}
+	 */
+
 	public Employee searchPasswordExists(Employee employee) {
+
+		// TODO conform the old password
+
 		String query = "SELECT id,name FROM EV_EMPLOYEE WHERE password = ? AND id = ?";
-		Object[] parameters = new Object[] { employee.getPassword(),employee.getId() };
+		Object[] parameters = new Object[] { employee.getPassword(),
+				employee.getId() };
 		Employee employeeDetails = jdbcTemplate
 				.queryForObject(
 						query,
@@ -91,12 +114,20 @@ public class AuthenticationDAO {
 		return employeeDetails;
 	}
 
-	public int updateName(Employee employee) {
-		String query = "UPDATE EV_EMPLOYEE SET name=? WHERE id=?";
-		Object[] parameters = new Object[] { employee.getName(),
-				employee.getId() };
-		int updateNameResult = jdbcTemplate.update(query, parameters);
-		return updateNameResult;
-	}
+	public Employee searchEmailExists(String email) {
+		// TODO Auto-generated method stub
+		String query = "SELECT id,name FROM EV_EMPLOYEE WHERE email = ?";
+		Object[] parameters = new Object[] { email };
+		Employee employeeDetails = jdbcTemplate.queryForObject(query,
+				parameters, (resultSet, row) -> {
+					Employee employeeDetail = null;
+					if (!resultSet.equals(null)) {
+						employeeDetail = employeeIntialization(resultSet);
 
+					}
+					return employeeDetail;
+				});
+
+		return employeeDetails;
+	}
 }

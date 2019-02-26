@@ -28,6 +28,8 @@ public class HrController {
 	@PostMapping("/searchUser")
 	public List<EmployeeTopics> searchUserDetails(
 			@RequestParam("empid") int empid) throws Exception {
+		
+		//TODO search user details
 
 		Employee employee = new Employee();
 		employee.setId(empid);
@@ -39,6 +41,8 @@ public class HrController {
 	@GetMapping("/report")
 	public void reportGenerate() throws IOException
 	{
+		//TODO generate use details as excel
+		
 		services.employeeDetailsExcel()  ;
 		
 		

@@ -37,10 +37,13 @@ public class AdministratorController {
 	Validate validator;
 
 	@PostMapping("/addUser")
-	public int registeration(@RequestParam("empid") int empid,
+	public int registration(@RequestParam("empid") int empid,
 			@RequestParam("name") String name,
 			@RequestParam("email") String email,
 			@RequestParam("password") String password) throws Exception {
+		
+		//TODO Registration
+		validator.emailValidation(email);
 		Employee employee = new Employee();
 		employee.setId(empid);
 		employee.setName(name);
@@ -54,16 +57,12 @@ public class AdministratorController {
 	@PostMapping("/addTopic")
 	public int insertTopic(@RequestParam("topicName") String topicName)
 			throws Exception {
+		
+		//TODO add topic
+		validator.searchTopic(topicName);
 		int noOfRows = 0;
 		Topics topic = new Topics();
 		topic.setName(topicName);
-		boolean isExists = validator.topicInsertValidation(topic);
-		System.out.println(isExists);
-		if (!isExists) {
-			noOfRows = topicDAO.addTopic(topic);
-		}
-		else
-			throw new Exception("Already exists in database");
 		return noOfRows;
 	}
 
@@ -77,16 +76,20 @@ public class AdministratorController {
 	public List<EmployeeTopics> displayEvaluation() {
 		List<EmployeeTopics> employeeTopicsList = employeeTopicsDAO
 				.searchEvaluation();
+		
+		//TODO Display all the evaluation as table
 
 		return services.fetchUserTopicsDetails(employeeTopicsList);
 	}
-	
+
 	@GetMapping("/displayInfo")
-	public void display() throws IOException
-	{
-		List<EmployeeTopics> evalList=employeeTopicsDAO.searchEvaluation();
+	public void display() throws IOException {
+		
+		//TODO Display all the evaluation as excel
+		
+		List<EmployeeTopics> evalList = employeeTopicsDAO.searchEvaluation();
 		services.fetchUserTopicsDetails(evalList);
-		services.employeeEvaluationDetail(evalList);
+		services.employeeEvaluationExcel(evalList);
 	}
 
 }

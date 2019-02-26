@@ -15,8 +15,16 @@ import com.chainsys.evaluationapp.model.EmployeeTopics;
 public class EmployeeDAO {
 	@Autowired
 	JdbcTemplate jdbcTemplate;
+	
+	/**
+	 * 
+	 * @return {@link List}
+	 */
 
 	public List<Employee> fetchUsers() {
+
+		// TODO fetch the users
+
 		String query = "SELECT id,name FROM EV_EMPLOYEE";
 		List<Employee> userDetails = jdbcTemplate
 				.query(query,
@@ -28,10 +36,19 @@ public class EmployeeDAO {
 						});
 		return userDetails;
 	}
+	
+	/**
+	 * 
+	 * @param resultSet
+	 * @return {@link Employee}
+	 * @throws SQLException
+	 */
 
 	private Employee EmployeeDetailInitialization(ResultSet resultSet)
 			throws SQLException {
-		// TODO Auto-generated method stub
+
+		// TODO Initialize employee detail
+
 		Employee employee = new Employee();
 		employee.setId(resultSet.getInt("id"));
 		employee.setName(resultSet.getString("name"));
@@ -46,6 +63,8 @@ public class EmployeeDAO {
 	 */
 	public int addEmployee(Employee employee) throws Exception {
 
+		// TODO Add new employee
+
 		String query = "INSERT INTO EV_EMPLOYEE values(?,?,?,?)";
 
 		Object[] parameters = new Object[] { employee.getId(),
@@ -54,8 +73,17 @@ public class EmployeeDAO {
 		return addEmployeeResult;
 
 	}
+	
+	/**
+	 * 
+	 * @param employeeTopics
+	 * @return int
+	 */
 
 	public int addEmployeeStatus(EmployeeTopics employeeTopics) {
+
+		// TODO Add new status
+
 		String query = "INSERT INTO EV_EMPLOYEETOPICS(empid,topicid,statusid,createdon,modifiedon) values (?,?,?,?,?)";
 		Object[] parameters = new Object[] {
 				employeeTopics.getEmployee().getId(),
@@ -67,12 +95,22 @@ public class EmployeeDAO {
 		return insertEmployeeStatus;
 
 	}
+	
+	/**
+	 * 
+	 * @param employeeTopics
+	 * @return int
+	 */
+	 
 
 	public int updateEmployeeStatus(EmployeeTopics employeeTopics) {
 		String query = "UPDATE EV_EMPLOYEETOPICS SET statusid=? ,modifiedon=? WHERE empid=? and topicid=?";
 		Object[] parameters = new Object[] {
 
-		employeeTopics.getStatus().getId(), employeeTopics.getUpdatedOn(),
+		//TODO update the status
+
+				employeeTopics.getStatus().getId(),
+				employeeTopics.getUpdatedOn(),
 				employeeTopics.getEmployee().getId(),
 				employeeTopics.getTopic().getId() };
 
@@ -80,8 +118,16 @@ public class EmployeeDAO {
 		return updateEmployeeStatus;
 
 	}
+	/**
+	 * 
+	 * @param employee id
+	 * @return {@link Employee}
+	 */
 
 	public Employee searchEmployeeName(int id) {
+		
+		//TODO search employee name by ID
+		
 		String query = "SELECT id,name FROM EV_EMPLOYEE WHERE id=?";
 		Object[] parameters = new Object[] { id };
 		Employee employeeDetails = jdbcTemplate
@@ -96,14 +142,23 @@ public class EmployeeDAO {
 						});
 		return employeeDetails;
 	}
+	
+	/**
+	 * 
+	 * @param resultSet
+	 * @return Employee
+	 * @throws SQLException
+	 */
 
 	public Employee employeeNameInitialization(ResultSet resultSet)
 			throws SQLException {
+		
+		//TODO Initialize the name
+		
 		Employee employee = new Employee();
 		employee.setId(resultSet.getInt("id"));
 		employee.setName(resultSet.getString("name"));
 		return employee;
 	}
-
-		
+	
 }
