@@ -44,16 +44,18 @@ public class Services {
 
 		List<EmployeeTopics> employeeEvaluationDetails = employeeTopicsDAO
 				.searchEvaluationById(employee);
-
+		
 		employeeEvaluationDetails.forEach(employeeDetail -> {
-
+			
 			employeeDetail.setTopic(topicsDAO.searchTopicName(employeeDetail
 					.getTopic().getId()));
 			employeeDetail.setStatus(statusDAO.searchStatusName(employeeDetail
 					.getStatus().getId()));
+			
+			employeeDetail.setEmployee(employee);
 
 		});
-
+		
 		return employeeEvaluationDetails;
 
 	}

@@ -2,14 +2,12 @@ package com.chainsys.evaluationapp.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.chainsys.evaluationapp.model.Employee;
-import com.chainsys.evaluationapp.model.EmployeeTopics;
 import com.chainsys.evaluationapp.services.Services;
 
 @Repository
@@ -45,7 +43,7 @@ public class AuthenticationDAO {
 	 * @throws Exception
 	 */
 
-	public List<EmployeeTopics> loginValidation(Employee employee)
+	public Employee loginValidation(Employee employee)
 			throws Exception {
 
 		// TODO perform login validation
@@ -55,15 +53,19 @@ public class AuthenticationDAO {
 		Object[] parameters = new Object[] { employee.getEmail(),
 				employee.getPassword() };
 
-		Employee employeeDetail = jdbcTemplate.queryForObject(query,
-				parameters, (resultSet, row) -> {
-					Employee userInfo = employeeIntialization(resultSet);
-					return userInfo;
-				});
-		System.out.println(employeeDetail.getId() + "login validation");
-		List<EmployeeTopics> userDetails;
-		userDetails = services.fetchUserDetails(employeeDetail);
-		return userDetails;
+		Employee employeeDetail = null;
+		try {
+			employeeDetail = jdbcTemplate.queryForObject(query,
+					parameters, (resultSet, row) -> {
+						Employee userInfo = employeeIntialization(resultSet);
+						return userInfo;
+					});
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		}
+		
+		return employeeDetail;
 
 	}
 

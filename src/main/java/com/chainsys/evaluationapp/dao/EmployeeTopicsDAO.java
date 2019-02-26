@@ -23,6 +23,7 @@ public class EmployeeTopicsDAO {
 
 	@Autowired
 	StatusDAO statusDAO;
+	
 
 	/**
 	 * 
@@ -40,10 +41,8 @@ public class EmployeeTopicsDAO {
 				.query(query,
 						parameters,
 						(resultSet, row) -> {
-
+							
 							EmployeeTopics employeeDetail = employeeTopicsIntailization(resultSet);
-							employeeDetail.getEmployee().setName(
-									employee.getName());
 							return employeeDetail;
 
 						});

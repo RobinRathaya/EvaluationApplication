@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +21,7 @@ import com.chainsys.evaluationapp.model.Employee;
 import com.chainsys.evaluationapp.model.EmployeeTopics;
 import com.chainsys.evaluationapp.model.Status;
 import com.chainsys.evaluationapp.model.Topics;
+import com.chainsys.evaluationapp.services.Services;
 import com.chainsys.evaluationapp.validator.Validate;
 
 @CrossOrigin
@@ -38,27 +41,51 @@ public class UserController {
 	@Autowired
 	Validate validator;
 
-	@PostMapping("/login")
-	public List<EmployeeTopics> login(@RequestParam("email") String email,
-			@RequestParam("password") String password) throws Exception {
-		
-		//TODO validate Sign-in
+	@Autowired
+	Services services;
 
+	@PostMapping("/login")
+	public ResponseEntity<?> login(@RequestParam("email") String email,
+			@RequestParam("password") String password) throws Exception {
+
+		// TODO validate Sign-in
+
+		Employee searchEmployee = null;
+		try {
+			Employee employee = new Employee();
+			employee.setEmail(email);
+			employee.setPassword(password);
+			validator.loginValidation(employee);
+			searchEmployee = authenticationDAO.loginValidation(employee);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// List<EmployeeTopics> userDetails=services.fetchUserDetails(employee);
+
+		if (searchEmployee == null) {
+			return new ResponseEntity(HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity(searchEmployee, HttpStatus.OK);
+		}
+	}
+
+	@GetMapping("/userInfo")
+	public List<EmployeeTopics> userEvaluationDetail(int employeeId) throws Exception {
 		Employee employee = new Employee();
-		employee.setEmail(email);
-		employee.setPassword(password);
-		List<EmployeeTopics> userDetails = authenticationDAO
-				.loginValidation(employee);
-		return userDetails;
+		employee.setId(employeeId);
+		List<EmployeeTopics> employeeInfo = services.fetchUserDetails(employee);
+		return employeeInfo;
+
 	}
 
 	@PostMapping("/addstatus")
 	public int addStatus(@RequestParam("empid") int empid,
 			@RequestParam("topicname") String topicName,
 			@RequestParam("statusid") int statusId) throws Exception {
-		
-		//TODO add new status for a topic
-		
+
+		// TODO add new status for a topic
+
 		int noOfRows = 0;
 		EmployeeTopics employeeTopics = new EmployeeTopics();
 		Employee employee = new Employee();
@@ -83,8 +110,8 @@ public class UserController {
 	public int updateStatus(@RequestParam("empid") int empid,
 			@RequestParam("topicname") String topicName,
 			@RequestParam("statusid") int statusId) {
-		
-		//TODO update the status for topic
+
+		// TODO update the status for topic
 
 		EmployeeTopics employeeTopics = new EmployeeTopics();
 		Employee employee = new Employee();
@@ -106,20 +133,21 @@ public class UserController {
 
 	@GetMapping("/displaytopics")
 	public List<Topics> displayTopics() throws Exception {
-		
+
 		// TODO display all the topics
-		
+
 		List<Topics> topicsList = topicsDAO.displayTopics();
 		return topicsList;
 	}
 
 	@PostMapping("/resetpassword")
-	public int resetPassword(@RequestParam("empid") int empid,			
+	public int resetPassword(@RequestParam("empid") int empid,
 			@RequestParam("newpassword") String newpassword,
-			@RequestParam("oldpassword") String oldpassword) throws InvalidPasswordException {
-		
-		//TODO reset the password for profile
-		
+			@RequestParam("oldpassword") String oldpassword)
+			throws InvalidPasswordException {
+
+		// TODO reset the password for profile
+
 		int resetStatus = 0;
 		Employee employee = new Employee();
 		employee.setId(empid);

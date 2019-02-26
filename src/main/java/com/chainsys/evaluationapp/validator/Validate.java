@@ -29,6 +29,16 @@ public class Validate {
 	@Autowired
 	AuthenticationDAO authenticationDAO;
 
+	public void loginValidation(Employee User) throws Exception {
+		Employee userVerify = authenticationDAO.loginValidation(User);
+		if (userVerify ==null ) {
+			throw new InvalidEmailException("Email does not exists");
+		}
+		else if (userVerify.getName()==null) {
+			throw new InvalidEmailException("Invalid email");
+		}
+	}
+
 	public void statusInsertValidation(EmployeeTopics employeeTopic)
 			throws Exception {
 		// TODO status validation
