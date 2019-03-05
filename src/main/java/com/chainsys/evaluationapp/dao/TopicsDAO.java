@@ -38,15 +38,15 @@ public class TopicsDAO {
 	 * @return void
 	 */
 	public int updateTopic(Topics topic) throws Exception {
-		
-		//TODO update the topic name
-		
+
+		// TODO update the topic name
+
 		String query = "UPDATE EV_TOPICS SET name=? WHERE topicid=? ";
 		Object[] parameters = new Object[] { topic.getName(), topic.getId() };
 		int updateTopicResult = jdbcTemplate.update(query, parameters);
 		return updateTopicResult;
 	}
-	
+
 	/**
 	 * 
 	 * @param topicId
@@ -54,8 +54,8 @@ public class TopicsDAO {
 	 */
 
 	public Topics searchTopicName(int topicId) {
-		
-		//TODO search topic name by ID
+
+		// TODO search topic name by ID
 
 		String query = "SELECT t.name FROM EV_TOPICS t WHERE t.topicid=?";
 		Object[] parameters = new Object[] { topicId };
@@ -127,7 +127,7 @@ public class TopicsDAO {
 		int deleteTopicResult = jdbcTemplate.update(query, parameters);
 		return deleteTopicResult;
 	}
-	
+
 	/**
 	 * 
 	 * @param topicName
@@ -135,14 +135,15 @@ public class TopicsDAO {
 	 */
 
 	public Topics searchTopicId(String topicName) {
-
+		System.out.println(topicName);
 		String query = "SELECT topicid,name FROM EV_TOPICS  WHERE name=?";
 		Object[] parameters = new Object[] { topicName };
 
 		Topics fetchedTopic = jdbcTemplate.queryForObject(query, parameters, (
 				resultSet, row) -> {
-
-			Topics topicIdFetch = topicIntialization(resultSet);
+			Topics topicIdFetch = null;
+			if (!resultSet.equals(null))
+				topicIdFetch = topicIntialization(resultSet);
 
 			return topicIdFetch;
 		});

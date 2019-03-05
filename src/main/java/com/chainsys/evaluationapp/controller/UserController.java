@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.chainsys.evaluationapp.ExceptionHandler.InvalidPasswordException;
 import com.chainsys.evaluationapp.dao.AuthenticationDAO;
 import com.chainsys.evaluationapp.dao.EmployeeDAO;
+import com.chainsys.evaluationapp.dao.EmployeeTopicsDAO;
 import com.chainsys.evaluationapp.dao.TopicsDAO;
 import com.chainsys.evaluationapp.model.Employee;
 import com.chainsys.evaluationapp.model.EmployeeTopics;
@@ -43,6 +44,9 @@ public class UserController {
 
 	@Autowired
 	Services services;
+	
+	@Autowired
+	EmployeeTopicsDAO employeeTopicsDAO;
 
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestParam("email") String email,
@@ -70,7 +74,7 @@ public class UserController {
 		}
 	}
 
-	@GetMapping("/userInfo")
+	@PostMapping("/userInfo")
 	public List<EmployeeTopics> userEvaluationDetail(int employeeId) throws Exception {
 		Employee employee = new Employee();
 		employee.setId(employeeId);
@@ -103,6 +107,7 @@ public class UserController {
 		employeeTopics.setUpdatedOn(null);
 
 		validator.statusInsertValidation(employeeTopics);
+		employeeDAO.addEmployeeStatus(employeeTopics);
 		return noOfRows;
 	}
 
@@ -141,7 +146,7 @@ public class UserController {
 	}
 
 	@PostMapping("/resetpassword")
-	public int resetPassword(@RequestParam("empid") int empid,
+	public int oldPasswordCheck(@RequestParam("empid") int empid,
 			@RequestParam("newpassword") String newpassword,
 			@RequestParam("oldpassword") String oldpassword)
 			throws InvalidPasswordException {
@@ -153,6 +158,7 @@ public class UserController {
 		employee.setId(empid);
 		employee.setPassword(oldpassword);
 		validator.passwordValidation(employee);
+		employee.setPassword(newpassword);
 		resetStatus = authenticationDAO.resetPassword(employee);
 		return resetStatus;
 	}

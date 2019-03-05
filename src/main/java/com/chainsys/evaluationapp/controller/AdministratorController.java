@@ -35,6 +35,8 @@ public class AdministratorController {
 	Services services;
 	@Autowired
 	Validate validator;
+	@Autowired
+	TopicsDAO topicsDAO;
 
 	@PostMapping("/addUser")
 	public int registration(@RequestParam("empid") int empid,
@@ -43,7 +45,7 @@ public class AdministratorController {
 			@RequestParam("password") String password) throws Exception {
 		
 		//TODO Registration
-		validator.emailValidation(email);
+		
 		Employee employee = new Employee();
 		employee.setId(empid);
 		employee.setName(name);
@@ -59,10 +61,11 @@ public class AdministratorController {
 			throws Exception {
 		
 		//TODO add topic
-		validator.searchTopic(topicName);
+	
 		int noOfRows = 0;
 		Topics topic = new Topics();
 		topic.setName(topicName);
+		topicsDAO.addTopic(topic);
 		return noOfRows;
 	}
 

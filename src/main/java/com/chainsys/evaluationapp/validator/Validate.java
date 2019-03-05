@@ -61,28 +61,16 @@ public class Validate {
 
 		Employee employeeDetails = authenticationDAO
 				.searchPasswordExists(employee);
-		if (employeeDetails.getId() > 0) {
+		if (employeeDetails.getId() < 0) {
 			throw new InvalidPasswordException("Invalid password");
 		}
 
 	}
 
-	public void emailValidation(String email) throws InvalidEmailException {
-		// TODO check email ID already exists
 
-		Employee employeeDetails = authenticationDAO.searchEmailExists(email);
-		if (employeeDetails.getEmail() != null) {
-			throw new InvalidEmailException("Email already exists");
-		}
-	}
 
-	public void searchTopic(String topicName) throws InvalidNameException {
-		// TODO check topics exists
-		Topics topic = topicsDAO.searchTopicId(topicName);
-		if (topic.getId() > 0) {
-			throw new InvalidNameException("Topic name already exists");
-		}
+
 
 	}
 
-}
+
