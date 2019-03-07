@@ -18,7 +18,7 @@ public class AuthenticationDAO {
 	Services services;
 
 	/**
-	 * 
+	 * initialize employee detail
 	 * @param resultSet
 	 * @return {@link Employee}
 	 * @throws SQLException
@@ -26,9 +26,6 @@ public class AuthenticationDAO {
 
 	private Employee employeeIntialization(ResultSet resultSet)
 			throws SQLException {
-
-		// TODO initialize employee detail
-
 		Employee employee = new Employee();
 		employee.setId(resultSet.getInt("id"));
 		employee.setName(resultSet.getString("name"));
@@ -37,7 +34,7 @@ public class AuthenticationDAO {
 	}
 
 	/**
-	 * 
+	 *  perform login validation
 	 * @param employee
 	 * @return {@link Employee}
 	 * @throws Exception
@@ -45,14 +42,9 @@ public class AuthenticationDAO {
 
 	public Employee loginValidation(Employee employee)
 			throws Exception {
-
-		// TODO perform login validation
-
 		String query = "SELECT id,name,email,password FROM EV_EMPLOYEE WHERE email= ? AND password=? ";
-
 		Object[] parameters = new Object[] { employee.getEmail(),
 				employee.getPassword() };
-
 		Employee employeeDetail = null;
 		try {
 			employeeDetail = jdbcTemplate.queryForObject(query,
@@ -64,21 +56,18 @@ public class AuthenticationDAO {
 			// TODO Auto-generated catch block
 			//e.printStackTrace();
 		}
-		
+
 		return employeeDetail;
 
 	}
 
 	/**
-	 * 
+	 *  perform reset password
 	 * @param employee
 	 * @return int
 	 */
 
 	public int resetPassword(Employee employee) {
-
-		// TODO perform reset password
-
 		String query = "UPDATE EV_EMPLOYEE SET password=? WHERE id=?";
 		Object[] parameters = new Object[] { employee.getPassword(),
 				employee.getId() };
@@ -87,15 +76,12 @@ public class AuthenticationDAO {
 	}
 
 	/**
-	 * 
+	 * conform the old password
 	 * @param employee
 	 * @return {@link Employee}
 	 */
 
 	public Employee searchPasswordExists(Employee employee) {
-
-		// TODO conform the old password
-
 		String query = "SELECT id,name FROM EV_EMPLOYEE WHERE password = ? AND id = ?";
 		Object[] parameters = new Object[] { employee.getPassword(),
 				employee.getId() };
@@ -112,12 +98,15 @@ public class AuthenticationDAO {
 								return employee1;
 							}
 						});
-
 		return employeeDetails;
 	}
+	/**
+	 * 
+	 * @param String
+	 * @return Employee
+	 */
 
 	public Employee searchEmailExists(String email) {
-		// TODO Auto-generated method stub
 		String query = "SELECT id,name FROM EV_EMPLOYEE WHERE email = ?";
 		Object[] parameters = new Object[] { email };
 		Employee employeeDetails = jdbcTemplate.queryForObject(query,
@@ -125,11 +114,9 @@ public class AuthenticationDAO {
 					Employee employeeDetail = null;
 					if (!resultSet.equals(null)) {
 						employeeDetail = employeeIntialization(resultSet);
-
 					}
 					return employeeDetail;
 				});
-
 		return employeeDetails;
 	}
 }

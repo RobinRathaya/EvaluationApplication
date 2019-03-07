@@ -2,10 +2,7 @@ package com.chainsys.evaluationapp.validator;
 
 import java.util.List;
 
-import javax.naming.InvalidNameException;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 
 import com.chainsys.evaluationapp.ExceptionHandler.InvalidEmailException;
 import com.chainsys.evaluationapp.ExceptionHandler.InvalidIdException;
@@ -15,9 +12,7 @@ import com.chainsys.evaluationapp.dao.EmployeeTopicsDAO;
 import com.chainsys.evaluationapp.dao.TopicsDAO;
 import com.chainsys.evaluationapp.model.Employee;
 import com.chainsys.evaluationapp.model.EmployeeTopics;
-import com.chainsys.evaluationapp.model.Topics;
 
-@Repository
 public class Validate {
 
 	@Autowired
@@ -31,10 +26,9 @@ public class Validate {
 
 	public void loginValidation(Employee User) throws Exception {
 		Employee userVerify = authenticationDAO.loginValidation(User);
-		if (userVerify ==null ) {
+		if (userVerify == null) {
 			throw new InvalidEmailException("Email does not exists");
-		}
-		else if (userVerify.getName()==null) {
+		} else if (userVerify.getName() == null) {
 			throw new InvalidEmailException("Invalid email");
 		}
 	}
@@ -52,7 +46,7 @@ public class Validate {
 				throw new InvalidIdException("Status already created");
 			}
 		}
-
+	
 	}
 
 	public void passwordValidation(Employee employee)
@@ -67,10 +61,4 @@ public class Validate {
 
 	}
 
-
-
-
-
-	}
-
-
+}

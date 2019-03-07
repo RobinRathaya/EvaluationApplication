@@ -44,7 +44,7 @@ public class UserController {
 
 	@Autowired
 	Services services;
-	
+
 	@Autowired
 	EmployeeTopicsDAO employeeTopicsDAO;
 
@@ -131,7 +131,7 @@ public class UserController {
 		employeeTopics.setStatus(status);
 		employeeTopics.setUpdatedOn(LocalDateTime.now());
 
-		int noOfRows = employeeDAO.updateEmployeeStatus(employeeTopics);
+		int noOfRows = employeeDAO.updateEmployeeTopicStatus(employeeTopics);
 
 		return noOfRows;
 	}
@@ -149,7 +149,7 @@ public class UserController {
 	public int oldPasswordCheck(@RequestParam("empid") int empid,
 			@RequestParam("newpassword") String newpassword,
 			@RequestParam("oldpassword") String oldpassword)
-			throws InvalidPasswordException {
+					throws InvalidPasswordException {
 
 		// TODO reset the password for profile
 
