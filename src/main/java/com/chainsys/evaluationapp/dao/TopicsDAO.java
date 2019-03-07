@@ -135,7 +135,6 @@ public class TopicsDAO {
 	 */
 
 	public Topics searchTopicId(String topicName) {
-		System.out.println(topicName);
 		String query = "SELECT topicid,name FROM EV_TOPICS  WHERE name=?";
 		Object[] parameters = new Object[] { topicName };
 

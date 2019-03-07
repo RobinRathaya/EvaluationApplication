@@ -62,12 +62,15 @@ public class EmployeeTopicsDAO {
 		//TODO Initialize employeeTopics
 		
 		EmployeeTopics employeeDetails = new EmployeeTopics();
-		employeeDetails.topic = new Topics();
-		employeeDetails.status = new Status();
-		employeeDetails.employee = new Employee();
-		employeeDetails.employee.setId(resultSet.getInt("et.empid"));
-		employeeDetails.topic.setId(resultSet.getInt("et.topicid"));
-		employeeDetails.status.setId(resultSet.getInt("et.statusid"));
+		Topics topic = new Topics();
+		Status status = new Status();
+		Employee employee = new Employee();
+		employee.setId(resultSet.getInt("et.empid"));
+		topic.setId(resultSet.getInt("et.topicid"));
+		status.setId(resultSet.getInt("et.statusid"));
+		employeeDetails.setEmployee(employee);
+		employeeDetails.setTopic(topic);
+		employeeDetails.setStatus(status);
 		employeeDetails.setCreatedOn(resultSet.getTimestamp("createdon")
 				.toLocalDateTime());
 		if (resultSet.getObject("modifiedon") != null) {
